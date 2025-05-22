@@ -1,0 +1,16 @@
+services:
+  main-db:
+    image: postgres:15
+    container_name: main-db
+    restart: always
+    environment:
+      POSTGRES_USER: auth_payments
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: main-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - main_db_data:/var/lib/postgresql/data
+
+volumes:
+  main_db_data:
