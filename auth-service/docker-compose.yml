@@ -4,8 +4,8 @@ services:
     container_name: main-db
     restart: always
     environment:
-      POSTGRES_USER: auth_payments
-      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: anh14112004
       POSTGRES_DB: main-db
     ports:
       - "5432:5432"
