@@ -1,14 +1,14 @@
 services:
-  main-db:
+  oder-db:
     image: postgres:15
     container_name: oder-db
     restart: always
     environment:
-      POSTGRES_USER: oder
-      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: anh14112004
       POSTGRES_DB: oder-db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - order:/var/lib/postgresql/data
 

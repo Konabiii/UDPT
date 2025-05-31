@@ -1,4 +1,37 @@
--- Table: orders
+-- Carts
+CREATE TABLE carts (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Cart Items
+CREATE TABLE cart_items (
+  id SERIAL PRIMARY KEY,
+  cart_id INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
+  product_id VARCHAR(100) NOT NULL,
+  quantity INTEGER NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  UNIQUE(cart_id, product_id)
+);
+
+-- Trigger Function to update 'updated_at'
+CREATE OR REPLACE FUNCTION update_cart_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = CURRENT_TIMESTAMP;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger on carts
+CREATE TRIGGER trg_update_cart_timestamp
+BEFORE UPDATE ON carts
+FOR EACH ROW
+EXECUTE FUNCTION update_cart_timestamp();
+
+-- Orders
 CREATE TABLE orders (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL,
@@ -7,19 +40,18 @@ CREATE TABLE orders (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table: order_items
+-- Order Items
 CREATE TABLE order_items (
   id SERIAL PRIMARY KEY,
-  order_id INTEGER REFERENCES orders(id),
-  product_id VARCHAR(100),
-  quantity INTEGER,
-  price DECIMAL(10,2)
+  order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  product_id VARCHAR(100) NOT NULL,
+  quantity INTEGER NOT NULL,
+  price DECIMAL(10,2) NOT NULL
 );
 
--- Table: order_stats (optional)
+-- Order Stats
 CREATE TABLE order_stats (
-  id SERIAL PRIMARY KEY,
-  stat_date DATE NOT NULL,
-  total_orders INTEGER,
-  total_sales DECIMAL(10,2)
+  stat_date DATE PRIMARY KEY, -- đổi từ id SERIAL sang stat_date làm khóa chính
+  total_orders INTEGER NOT NULL,
+  total_sales DECIMAL(10,2) NOT NULL
 );

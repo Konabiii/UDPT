@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function Register() {
   const [formData, setFormData] = useState({
-    email: '', // Will serve as 'Số điện thoại/Email'
+    email: '', 
     password: '',
     full_name: ''
   });
@@ -24,7 +24,6 @@ function Register() {
       setError('Vui lòng điền đầy đủ thông tin.');
       return;
     }
-    // Basic password validation (example)
     if (formData.password.length < 6) {
         setError('Mật khẩu phải có ít nhất 6 ký tự.');
         return;
